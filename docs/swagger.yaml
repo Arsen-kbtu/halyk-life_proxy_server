@@ -1,0 +1,88 @@
+basePath: /
+definitions:
+  models.ProxyRequest:
+    properties:
+      headers:
+        additionalProperties:
+          type: string
+        type: object
+      method:
+        type: string
+      url:
+        type: string
+    type: object
+  models.ProxyResponse:
+    properties:
+      headers:
+        additionalProperties:
+          type: string
+        type: object
+      id:
+        type: string
+      length:
+        type: integer
+      status:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a proxy server API.
+  title: Proxy Server API
+  version: "1.0"
+paths:
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint checks the health of the server.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health check
+      tags:
+      - health
+  /history:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint retrieves the history of proxied requests.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ProxyResponse'
+            type: array
+      summary: Retrieves request history
+      tags:
+      - history
+  /proxy:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint proxies a request.
+      parameters:
+      - description: Proxy request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ProxyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProxyResponse'
+      summary: Handles the proxy request
+      tags:
+      - proxy
+swagger: "2.0"
